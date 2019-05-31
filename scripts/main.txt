@@ -1,0 +1,52 @@
+DEFINE OBJECTS 1
+DEFINE OBJECT SANNY BUILDER 3.2.2   
+
+DEFINE MISSIONS 0    
+
+//============== MAIN =================
+03A4: name_thread 'MAIN' 
+fade 0 0  
+042C: set_total_missions_to 0 
+030D: set_total_mission_points_to 0 
+01F0: set_max_wanted_level_to 6 
+02ED: set_total_hidden_packages_to 0 
+0111: set_wasted_busted_check_to 0 
+00C0: set_current_time 12 0 
+01EB: set_traffic_density_multiplier_to 0.0
+03DE: set_pedestrians_density_multiplier_to 0.0 
+04E4: unknown_refresh_game_renderer_at 468.7745 -1298.623 
+03CB: set_camera 468.7745 -1298.623 11.0712 
+0053: $PLAYER_CHAR = create_player #NULL at 468.7745 -1298.623 11.0712 
+01F5: $PLAYER_ACTOR = create_emulated_actor_from_player $PLAYER_CHAR 
+0180: set_on_mission_flag_to $ONMISSION 
+fade 1 0  
+wait 0 
+if 
+Player.Defined($PLAYER_CHAR)
+jf @MAIN_188 
+set_weather 0 
+01B5: force_weather 0
+if 
+not Actor.Dead($PLAYER_ACTOR)
+jf @MAIN_188 
+0352: set_actor $PLAYER_ACTOR skin_to 'PLAYER' 
+038B: load_requested_models 
+if 
+not Actor.Dead($PLAYER_ACTOR)
+jf @MAIN_188 
+0353: refresh_actor $PLAYER_ACTOR 
+
+:MAIN_188
+wait 0  
+select_interior 0 
+Player.CanMove($PLAYER_CHAR) = False
+Camera.SetPosition(-1000.0, 191.5, 12.0, 0.0, 0.0, 0.0)
+Camera.PointAt(-1000.0, 185.5, 11.5, 2)
+
+:MAIN_203
+wait 1500  
+jump @MAIN_203
+
+end_thread 
+return
+//==================================== 
