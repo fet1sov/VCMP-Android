@@ -9,6 +9,7 @@
 extern uintptr_t g_libGTAVC;
 extern char const* g_pStorage;
 
+void InitNetwork();
 uint32_t GetTickCount();
 
 #define LOG_TAG "VICEMP"

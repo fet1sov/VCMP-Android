@@ -8,7 +8,7 @@ uintptr_t *pdwParamVars[18];
 uint8_t ExecuteScriptBuf()
 {
 	gst->dwScriptIP = (uintptr_t)ScriptBuf;
-	(( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x10F9BC))(gst);;
+	(( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x10F9BC))(gst);
 
 	return gst->condResult;
 }

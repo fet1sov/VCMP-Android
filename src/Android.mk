@@ -10,5 +10,6 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/util/*.cpp)
 
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
+LOCAL_CPPFLAGS += -D_ARM_ -D_RAKNET_THREADSAFE
 LOCAL_CPPFLAGS += -w -pthread -fpack-struct=1 -Wall -fdiagnostics-color=auto -O2 -ffast-math -std=c++11
 include $(BUILD_SHARED_LIBRARY)

@@ -1,7 +1,7 @@
 #pragma once
 
 #define ADDR_GAMESTATE 0x7152BC
-#define MEM_START 0x27295C
+#define MEM_START 0x2C82B0
 #define ADDR_STORAGE 0x75311C
 
 /* HOOKS */

@@ -2,6 +2,7 @@
 #include "game.h"
 
 void InitScripting();
+void InstallHooks();
 
 CGame::CGame()
 {
@@ -11,6 +12,9 @@ CGame::CGame()
 void CGame::InitGame()
 {
 	LOGI("libGTAVC.so: Game has been inited!");
+
 	ApplyPatches();
 	InitScripting();
+	
+	InstallHooks();
 }

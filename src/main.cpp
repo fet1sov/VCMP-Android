@@ -4,6 +4,8 @@
 uintptr_t g_libGTAVC = 0;
 char const* g_pStorage = nullptr;
 
+bool bNetworkInited = false;
+
 CGame *pGame = 0;
 
 void *Init(void *p)
@@ -44,7 +46,7 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	LOGI("Storage path: %s", g_pStorage);
 
 	/* Hooks */
-	
+	InitHooks();
 	/* ========== */
 
 	pthread_t thread;
