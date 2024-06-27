@@ -1,4 +1,4 @@
-# Vice City Multiplayer for Android OS
+# ![image](https://github.com/fet1sov/VCMP-Android/assets/44091614/b18550ca-bf6b-4459-9485-9d593f571c7b) Vice City Multiplayer for Android OS
 ![alt-текст](https://i.imgur.com/lQEzDrK.png "Yes now it`s open-source")
 #### The open source multiplayer modification of GTA:VC on Android OS
 #### © fet1sov
