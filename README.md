@@ -1,7 +1,7 @@
 # Vice City Multiplayer for Android OS
 ![alt-текст](https://i.imgur.com/lQEzDrK.png "Yes now it`s open-source")
 #### The open source multiplayer modification of GTA:VC on Android OS
-#### © Bogdan Kotov and dxAugust
+#### © fet1sov
 
 
 
