@@ -3,12 +3,17 @@
 
 GAME_SCRIPT_THREAD *gst;
 uint8_t ScriptBuf[255];
-uintptr_t *pdwParamVars[18];
+uint32_t *pdwParamVars[18];
 
 uint8_t ExecuteScriptBuf()
 {
 	gst->dwScriptIP = (uintptr_t)ScriptBuf;
-	(( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x10F9BC))(gst);
+	
+#if defined(__aarch64__)
+	(( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x19D1A4))(gst);
+#else
+	(( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x144B14))(gst);
+#endif
 
 	return gst->condResult;
 }

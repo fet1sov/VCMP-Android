@@ -3,6 +3,7 @@
 #include <android/log.h>
 #include <stdio.h>
 #include <cstdlib>
+#include <cstring>
 #include <unistd.h>
 #include <pthread.h>
 
