@@ -11,7 +11,7 @@ CGame::CGame()
 
 void CGame::InitGame()
 {
-	LOGI("libGTAVC.so: Game has been inited!");
+	LOGI("> Inject game...");
 
 	ApplyPatches();
 	InitScripting();

@@ -3,7 +3,7 @@
 
 void ApplyPatches()
 {
-	LOGI("libGTAVC.so: Patching the game...");
+	LOGI("> Inject pacthes...");
 
 	WriteMemory(g_libGTAVC+CLOCK_DATA, "VC:MP", 6);
 

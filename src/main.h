@@ -1,6 +1,8 @@
 #pragma once
 
 #include <android/log.h>
+#include "log.h"
+
 #include <stdio.h>
 #include <cstdlib>
 #include <cstring>
@@ -13,8 +15,6 @@ extern char const* g_pStorage;
 void InitNetwork();
 uint32_t GetTickCount();
 
-#define LOG_TAG "VICEMP"
-#define LOGI(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 /* ============ */
 #include "game/game.h"

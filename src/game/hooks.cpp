@@ -16,7 +16,6 @@ void TouchEvent_hook(int type, int num, int posX, int posY)
 void (*NvUtilInit)();
 void NvUtilInit_hook()
 {
-    LOGI("> NvUtilInit");
     NvUtilInit();
 
 	// .. vc
@@ -25,11 +24,12 @@ void NvUtilInit_hook()
 
 	// .. client
     g_pStorage = (char*)(g_libGTAVC + NV_STORAGE);
-    LOGI("> Custom Storage: %s", g_pStorage);
+    Log("> Custom Storage: %s", g_pStorage);
 }
 
 void InstallHooks()
 {
+    LOGI("> Inject hooks...");
 	InstallHook(g_libGTAVC+HOOK_NVINIT, (uintptr_t)NvUtilInit_hook, (uintptr_t*)NvUtilInit);
 	InstallHook(g_libGTAVC+HOOK_TOUCHEVENT, (uintptr_t)TouchEvent_hook, (uintptr_t*)&TouchEvent);
 }
