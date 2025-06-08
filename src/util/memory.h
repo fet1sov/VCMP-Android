@@ -1,3 +1,6 @@
+//
+// Created by weikton on 08.06.2025.
+//
 #pragma once
 
 void UnFuck(uintptr_t target);

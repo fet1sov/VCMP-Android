@@ -38,12 +38,12 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	}
 	LOGI("libGTAVC.so: 0x%X", g_libGTAVC);
 
-	g_pStorage = "/storage/emulated/0/Android/data/com.rockstargames.gtavc/files/";
-	if(!g_pStorage)
-	{
-		return LOGI("Error: Storage path not found!");
-	}
-	LOGI("Storage path: %s", g_pStorage);
+	// g_pStorage = "/storage/emulated/0/Android/data/com.rockstargames.gtavc/files/";
+	// if(!g_pStorage)
+	// {
+	// 	return LOGI("Error: Storage path not found!");
+	// }
+	// LOGI("Storage path: %s", g_pStorage);
 
 	/* Hooks */
 	InitHooks();
