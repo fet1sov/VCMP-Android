@@ -5,13 +5,13 @@
 
 
 # How to build:
-1. [Download a NDK](https://developer.android.com/ndk/downloads)
+1. [Download a NDK (21+s)](https://developer.android.com/ndk/downloads)
 2. Unzip a NDK in folder
 3. In NDK folder create folder "jni"
 4. Download a sources from GitHub
 5. Unzip sources in folder "jni"
 6. Start the ndk-build.bat
-7. After library was built go to: "libs/armeabi-v7a"
+7. After library was built go to: "libs/armeabi-v7a" and "libs/arm64-v8a" (or get it in ready-lib folder)
 8. Insert the libVCMP.so in APK from sources (Its important cause original APK doenst work properly)
 9. Install APK
 10. Enjoy :)
