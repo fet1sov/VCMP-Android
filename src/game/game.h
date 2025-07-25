@@ -5,11 +5,10 @@
 class CGame
 {
 public:
-	CGame();
-	~CGame() {};
+    CGame();
+    ~CGame() {};
 
-	void InitGame();
-	void StartGame();
+    void InitGame();
 private:
-	CCamera* m_pGameCamera;
+    CCamera* m_pGameCamera;
 };

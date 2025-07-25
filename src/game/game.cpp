@@ -2,19 +2,19 @@
 #include "game.h"
 
 void InitScripting();
-void InstallHooks();
+//void InstallHooks();
 
 CGame::CGame()
 {
-	m_pGameCamera = new CCamera();
+    m_pGameCamera = new CCamera();
 }
 
 void CGame::InitGame()
 {
-	LOGI("> Inject game...");
+    LOGI("libGTAVC.so: Game has been inited!");
 
-	ApplyPatches();
-	InitScripting();
-	
-	InstallHooks();
+    //ApplyPatches();
+    InitScripting();
+
+    //InstallHooks();
 }

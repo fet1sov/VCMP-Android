@@ -1,63 +1,67 @@
 #include "main.h"
-#include <jni.h>
-
-uintptr_t g_libGTAVC = 0;
+#include "jniutil.h"
+#include "CHooks.h"
+#define LOGI(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+uintptr_t g_libGTAVC = 0; // libGTAVC
+const char* g_pAPKPackage;
 char const* g_pStorage = nullptr;
-
 bool bNetworkInited = false;
+#include "dependencies/Dobby/include/dobby.h"
+#include "game/game.h"
 
+jobject appContext;
+JavaVM *mVm;
+JNIEnv *mEnv;
+#ifdef IS_ARM64
+#define ADDR_GAMESTATE 0x57AED0
+#elif defined(IS_ARM32)
+#define ADDR_GAMESTATE 0x7152BC
+#endif
 CGame *pGame = 0;
 
-void *Init(void *p)
-{
-	pGame = new CGame();
+void (*TouchEvent)(int, int, int posX, int posY);
 
-	while (true)
-	{
-		if (*(uintptr_t*)(g_libGTAVC+ADDR_GAMESTATE) == 9)
-		{
-			LOGI("libGTAVC.so: Game start sended!");
-			pGame->InitGame();
-			break;
-		} else {
-			usleep(5000);
-		}
-	}
-
-	pthread_exit(0);
+void TouchEvent_hook(int type, int num, int posX, int posY) {
+    return TouchEvent(type, num, posX, posY);
 }
 
-extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) 
+void WNGTA() 
 {
-	LOGI("VC:MP has inited!");
+#ifdef IS_ARM64
 
-	g_libGTAVC = findLibrary("libGTAVC.so");
-	if (!g_libGTAVC)
+    DobbyHook((void *)GTA(0x45D4E8), (void *)TouchEvent_hook, (void **)&TouchEvent);
+#elif defined(IS_ARM32)
+    DobbyHook((void *)GTA(0x3199EC), (void *)TouchEvent_hook, (void **)&TouchEvent);
+
+#endif
+}
+
+extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
+{
+    LOGI("VC:MP initializing...");
+    
+	g_libGTAVC = ARMHook::getLibraryAddress("libGTAVC.so");
+	if(g_libGTAVC)
 	{
-		LOGI("ERROR: libGTAVC.so not found!");
+        WNGTA();
+        CHooks::InitHooksKuzia();
+	pGame->InitGame();
 	}
-	LOGI("libGTAVC.so: 0x%X", g_libGTAVC);
+    else
+    {
+        LOGE("ERROR: libGTAVC.so not found!");
+        return JNI_ERR;
+    }
 
-	// g_pStorage = "/storage/emulated/0/Android/data/com.rockstargames.gtavc/files/";
-	// if(!g_pStorage)
-	// {
-	// 	return LOGI("Error: Storage path not found!");
-	// }
-	// LOGI("Storage path: %s", g_pStorage);
+    g_pStorage = "/storage/emulated/0/Android/data/com.rockstargames.gtavc/files/";
 
-	/* Hooks */
-	InitHooks();
-	/* ========== */
-
-	pthread_t thread;
-	pthread_create(&thread, 0, Init, 0);
-
-    return JNI_VERSION_1_6;
+	return JNI_VERSION_1_6;
 }
 
 uint32_t GetTickCount()
 {
-    struct timeval tv;
-    gettimeofday(&tv,NULL);
-    return (tv.tv_sec*1000+tv.tv_usec/1000);
+	struct timeval tv;
+	gettimeofday(&tv, nullptr);
+
+	return (tv.tv_sec*1000 + tv.tv_usec/1000);
 }
