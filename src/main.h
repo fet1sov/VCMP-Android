@@ -1,28 +1,32 @@
-#pragma once
+#pragma once 
 
+#include <jni.h>
 #include <android/log.h>
-#include "log.h"
-
-#include <stdio.h>
 #include <cstdlib>
-#include <cstring>
+#include <string>
+#include <vector>
+#include <list>
 #include <unistd.h>
-#include <pthread.h>
+#include <algorithm>
+#include <cmath>
+#include <iostream>
+
+#include "ARMHook.h"
+#include "str_obfuscate.hpp"
+//#include "../dependencies/Dobby/include/dobby.h"
 
 extern uintptr_t g_libGTAVC;
+#define GTA(a) (g_libGTAVC + (a))
+
 extern char const* g_pStorage;
+extern const char* g_pAPKPackage;
+extern JavaVM *mVm;
+extern JNIEnv *mEnv;
 
-void InitNetwork();
 uint32_t GetTickCount();
+void SetFunc(uintptr_t addr, uintptr_t *orig);
 
-
-/* ============ */
-#include "game/game.h"
-#include "game/camera.h"
-#include "game/scripting.h"
-#include "game/patches.h"
-
-#include "util/address.h"
-#include "util/util.h"
-#include "util/memory.h"
-/* ============ */
+#define AndroidLog(a) __android_log_write(ANDROID_LOG_INFO, "VCMP", a);
+#define LOG_TAG "VCMP"
+#define LOGI(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)

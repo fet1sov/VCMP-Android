@@ -7,103 +7,105 @@ uint32_t *pdwParamVars[18];
 
 uint8_t ExecuteScriptBuf()
 {
-	gst->dwScriptIP = (uintptr_t)ScriptBuf;
-	
-#if defined(__aarch64__)
-	(( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x19D1A4))(gst);
-#else
-	(( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x144B14))(gst);
+    gst->dwScriptIP = (uintptr_t)ScriptBuf;
+    (( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x10F9BC))(gst);
+#ifdef IS_ARM64
+
+    (( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x19D1A4))(gst);
+#elif defined(IS_ARM32)
+    (( void (*)(GAME_SCRIPT_THREAD*))(g_libGTAVC+0x10F9BC))(gst);
+
 #endif
 
-	return gst->condResult;
+    return gst->condResult;
 }
 
 int ScriptCommand(const SCRIPT_COMMAND *pScriptCommand, ...)
 {
-	va_list ap;
-	const char* p = pScriptCommand->Params;
-	va_start(ap, pScriptCommand);
-	memcpy(&ScriptBuf, &pScriptCommand->OpCode, 2);
-	int buf_pos = 2;
-	uint16_t var_pos = 0;
+    va_list ap;
+    const char* p = pScriptCommand->Params;
+    va_start(ap, pScriptCommand);
+    memcpy(&ScriptBuf, &pScriptCommand->OpCode, 2);
+    int buf_pos = 2;
+    uint16_t var_pos = 0;
 
-	for(int i = 0; i < 18; i++)
-		gst->dwLocalVar[i] = 0;
+    for(int i = 0; i < 18; i++)
+        gst->dwLocalVar[i] = 0;
 
-	while(*p)
-	{
-		switch(*p)
-		{
-			case 'i':
-			{
-				int i = va_arg(ap, int);
-				ScriptBuf[buf_pos] = 0x01;
-				buf_pos++;
-				memcpy(&ScriptBuf[buf_pos], &i, 4);
-				buf_pos += 4;
-				break;
-			}
-			case 'f':
-			{
-				float f = (float)va_arg(ap, double);
-				ScriptBuf[buf_pos] = 0x06;
-				buf_pos++;
-				memcpy(&ScriptBuf[buf_pos], &f, 4);
-				buf_pos += 4;
-				break;
-			}
-			case 'v':
-			{
-				uint32_t *v = va_arg(ap, uint32_t*);
-				ScriptBuf[buf_pos] = 0x03;
-				buf_pos++;
-				pdwParamVars[var_pos] = v;
-				gst->dwLocalVar[var_pos] = *v;
-				memcpy(&ScriptBuf[buf_pos], &var_pos, 2);
-				buf_pos += 2;
-				var_pos++;
-				break;
-			}
-			case 's':
-			{
-				char* sz = va_arg(ap, char*);
-				unsigned char aLen = strlen(sz);
-				ScriptBuf[buf_pos] = 0x0E;
-				buf_pos++;
-				ScriptBuf[buf_pos] = aLen;
-				buf_pos++;
-				memcpy(&ScriptBuf[buf_pos],sz,aLen);				
-				buf_pos += aLen;
-				break;
-			}
-			case 'z':
-			{
-				ScriptBuf[buf_pos] = 0x00;			
-				buf_pos++;
-				break;
-			}
-			default:
-			{
-				return 0;
-			}
-		}
-		++p;
-	}
-	va_end(ap);
+    while(*p)
+    {
+        switch(*p)
+        {
+            case 'i':
+            {
+                int i = va_arg(ap, int);
+                ScriptBuf[buf_pos] = 0x01;
+                buf_pos++;
+                memcpy(&ScriptBuf[buf_pos], &i, 4);
+                buf_pos += 4;
+                break;
+            }
+            case 'f':
+            {
+                float f = (float)va_arg(ap, double);
+                ScriptBuf[buf_pos] = 0x06;
+                buf_pos++;
+                memcpy(&ScriptBuf[buf_pos], &f, 4);
+                buf_pos += 4;
+                break;
+            }
+            case 'v':
+            {
+                uint32_t *v = va_arg(ap, uint32_t*);
+                ScriptBuf[buf_pos] = 0x03;
+                buf_pos++;
+                pdwParamVars[var_pos] = v;
+                gst->dwLocalVar[var_pos] = *v;
+                memcpy(&ScriptBuf[buf_pos], &var_pos, 2);
+                buf_pos += 2;
+                var_pos++;
+                break;
+            }
+            case 's':
+            {
+                char* sz = va_arg(ap, char*);
+                unsigned char aLen = strlen(sz);
+                ScriptBuf[buf_pos] = 0x0E;
+                buf_pos++;
+                ScriptBuf[buf_pos] = aLen;
+                buf_pos++;
+                memcpy(&ScriptBuf[buf_pos],sz,aLen);
+                buf_pos += aLen;
+                break;
+            }
+            case 'z':
+            {
+                ScriptBuf[buf_pos] = 0x00;
+                buf_pos++;
+                break;
+            }
+            default:
+            {
+                return 0;
+            }
+        }
+        ++p;
+    }
+    va_end(ap);
 
-	int result = ExecuteScriptBuf();
-	if (var_pos)
-	{
-		for (int i=0; i < var_pos; i++)
-			*pdwParamVars[i] = gst->dwLocalVar[i];
-	}
+    int result = ExecuteScriptBuf();
+    if (var_pos)
+    {
+        for (int i=0; i < var_pos; i++)
+            *pdwParamVars[i] = gst->dwLocalVar[i];
+    }
 
-	return result;
+    return result;
 }
 
 void InitScripting()
 {
-	gst = new GAME_SCRIPT_THREAD;
-	memset(gst, 0, sizeof(GAME_SCRIPT_THREAD));
-	LOGI("Script: Inited!");
+    gst = new GAME_SCRIPT_THREAD;
+    memset(gst, 0, sizeof(GAME_SCRIPT_THREAD));
+    LOGI("Script: Inited!");
 }
