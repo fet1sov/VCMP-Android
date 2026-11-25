@@ -1,0 +1,95 @@
+name: Android NDK build
+
+on:
+  push:
+    branches: [dev-branch, production]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ndk-build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NDK_VERSION: r21e
+  ABIS: armeabi-v7a arm64-v8a
+
+jobs:
+  build:
+    name: Build libVCMP.so
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Android NDK ${{ env.NDK_VERSION }}
+        uses: android-actions/setup-ndk@v1
+        with:
+          ndk-version: ${{ env.NDK_VERSION }}
+          add-to-path: true
+
+      - name: Build with ndk-build
+        run: |
+          set -euo pipefail
+          mkdir -p build/jni
+          cp -R src/. build/jni/
+          ndk-build NDK_PROJECT_PATH="$PWD/build" -j"$(nproc)"
+
+      - name: Verify ABI of built libraries
+        run: |
+          set -euo pipefail
+          check() {
+            local abi="$1" expected="$2" class="$3" so="build/libs/$abi/libVCMP.so"
+            test -f "$so"
+            readelf -h "$so" | grep -q "$expected"
+            readelf -h "$so" | grep -q "$class"
+            ls -lh "$so"
+          }
+          check armeabi-v7a ARM ELF32
+          check arm64-v8a AArch64 ELF64
+
+      - name: Collect artifacts
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          for abi in $ABIS; do
+            install -D "build/libs/$abi/libVCMP.so" "dist/$abi/libVCMP.so"
+            cp "dist/$abi/libVCMP.so" "dist/libVCMP-$abi.so"
+          done
+          (cd dist && zip -qr VCMP-ndk-libs.zip armeabi-v7a arm64-v8a)
+          ls -l dist
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: VCMP-ndk-libs
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Attach libraries to release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: VCMP-ndk-libs
+          path: dist
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/libVCMP-*.so
+            dist/VCMP-ndk-libs.zip
+          fail_on_unmatched_files: true
+          generate_release_notes: true
