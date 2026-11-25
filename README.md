@@ -1,6 +1,12 @@
 # ![image](https://github.com/fet1sov/VCMP-Android/assets/44091614/b18550ca-bf6b-4459-9485-9d593f571c7b) Vice City Multiplayer for Android OS
 ![alt-текст](https://i.imgur.com/lQEzDrK.png "Yes now it`s open-source")
-#### The open source multiplayer modification of GTA:VC on Android OS
+
+[![Build](https://github.com/fet1sov/VCMP-Android/actions/workflows/android-ndk.yml/badge.svg)](https://github.com/fet1sov/VCMP-Android/actions/workflows/android-ndk.yml)
+
+#### The open source multiplayer modification of GTA:VC on Android OS <img width="24" height="24" alt="image" src="https://github.com/user-attachments/assets/4398de2f-d045-4003-887d-b853b72553aa" />
+
+> This is unofficial multiplayer modification for **GTA: Vice City** based on Android OS. Synchronized with Multiplayer on PC version. All rights reserved by Rockstar Games
+> All of this is not affiliated with **Rockstar Games**
 
 # How to build:
 1. [Download a NDK (21+s)](https://developer.android.com/ndk/downloads)
