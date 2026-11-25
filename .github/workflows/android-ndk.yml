@@ -43,10 +43,11 @@ jobs:
         run: |
           set -euo pipefail
           check() {
-            local abi="$1" expected="$2" class="$3" so="build/libs/$abi/libVCMP.so"
+            local so="build/libs/$1/libVCMP.so" hdr
             test -f "$so"
-            readelf -h "$so" | grep -q "$expected"
-            readelf -h "$so" | grep -q "$class"
+            hdr=$(readelf -h "$so")
+            grep -q "$2" <<<"$hdr"
+            grep -q "$3" <<<"$hdr"
             ls -lh "$so"
           }
           check armeabi-v7a ARM ELF32
