@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Android NDK ${{ env.NDK_VERSION }}
-        uses: android-actions/setup-ndk@v1
+        uses: nttld/setup-ndk@v1
         with:
           ndk-version: ${{ env.NDK_VERSION }}
           add-to-path: true
