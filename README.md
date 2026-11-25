@@ -1,8 +1,6 @@
 # ![image](https://github.com/fet1sov/VCMP-Android/assets/44091614/b18550ca-bf6b-4459-9485-9d593f571c7b) Vice City Multiplayer for Android OS
 ![alt-текст](https://i.imgur.com/lQEzDrK.png "Yes now it`s open-source")
 #### The open source multiplayer modification of GTA:VC on Android OS
-#### © fet1sov, weikton
-
 
 # How to build:
 1. [Download a NDK (21+s)](https://developer.android.com/ndk/downloads)
@@ -14,7 +12,6 @@
 7. After library was built go to: "libs/armeabi-v7a" and "libs/arm64-v8a" (or get it in ready-lib folder)
 8. Insert the libVCMP.so in APK from sources (Its important cause original APK doenst work properly)
 9. Install APK
-10. Enjoy :)
 
 # Setup:
 ## If you don't have access to the folder Android/data/, use the setting in Hooks!
@@ -23,9 +20,3 @@
   or
   - "/storage/emulated/0/VCMP/"
 ```
-
-# ScreenShots
-<p align="center">
-  <img src="https://i.imgur.com/9e4SqWf.jpg" width="500" title="First Day">
-</p>
-<p align="center">First day of Developing</p>
